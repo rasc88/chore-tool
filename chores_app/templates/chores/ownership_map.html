@@ -1,0 +1,20 @@
+{% extends "chores/base.html" %}
+
+{% block title %}Ownership map{% endblock %}
+
+{% block content %}
+<h1>Ownership map</h1>
+
+{% if ownership %}
+{% for person, instances in ownership %}
+<h2>{{ person }}</h2>
+<ul>
+    {% for instance in instances %}
+    <li>{{ instance.chore.name }} — due {{ instance.due_date }}{% if instance.is_overdue %} — OVERDUE{% endif %}</li>
+    {% endfor %}
+</ul>
+{% endfor %}
+{% else %}
+<p>Nothing currently assigned.</p>
+{% endif %}
+{% endblock %}

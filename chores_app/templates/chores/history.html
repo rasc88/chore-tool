@@ -1,0 +1,17 @@
+{% extends "chores/base.html" %}
+
+{% block title %}History{% endblock %}
+
+{% block content %}
+<h1>History</h1>
+
+{% if completed_instances %}
+<ul>
+    {% for instance in completed_instances %}
+    <li>{{ instance.completed_at }} — {{ instance.chore.name }} — done by {{ instance.completed_by }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No completions yet.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "chores/base.html" %}
+
+{% block title %}Status board{% endblock %}
+
+{% block content %}
+<h1>Status board</h1>
+
+<h2>Overdue</h2>
+{% if overdue %}
+<ul>
+    {% for instance in overdue %}
+    <li>
+        {{ instance.chore.name }} — due {{ instance.due_date }} — OVERDUE
+        {% if instance.is_unclaimed %}(unclaimed){% else %}— assigned to {{ instance.assigned_to }}{% endif %}
+        {% if instance.is_unclaimed %}
+        <form method="post" action="{% url 'chores:claim_instance' instance.pk %}">
+            {% csrf_token %}
+            <button type="submit">Claim</button>
+        </form>
+        {% endif %}
+        <form method="post" action="{% url 'chores:mark_done' instance.pk %}">
+            {% csrf_token %}
+            <button type="submit">Mark done</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Nothing overdue.</p>
+{% endif %}
+
+<h2>Pending</h2>
+{% if pending %}
+<ul>
+    {% for instance in pending %}
+    <li>
+        {{ instance.chore.name }} — due {{ instance.due_date }}
+        {% if instance.is_unclaimed %}(unclaimed){% else %}— assigned to {{ instance.assigned_to }}{% endif %}
+        {% if instance.is_unclaimed %}
+        <form method="post" action="{% url 'chores:claim_instance' instance.pk %}">
+            {% csrf_token %}
+            <button type="submit">Claim</button>
+        </form>
+        {% endif %}
+        <form method="post" action="{% url 'chores:mark_done' instance.pk %}">
+            {% csrf_token %}
+            <button type="submit">Mark done</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Nothing pending.</p>
+{% endif %}
+
+<h2>Done</h2>
+{% if done %}
+<ul>
+    {% for instance in done %}
+    <li>
+        {{ instance.chore.name }} — due {{ instance.due_date }} — done by {{ instance.completed_by }} at {{ instance.completed_at }}
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Nothing done yet today.</p>
+{% endif %}
+{% endblock %}

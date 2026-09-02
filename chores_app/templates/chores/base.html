@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Chore Tool{% endblock %}</title>
+    <style>
+        body {
+            margin: 0;
+            font-size: 16px;
+            line-height: 1.4;
+            font-family: system-ui, sans-serif;
+        }
+        .page {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1rem 2rem;
+        }
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.5rem 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid #ccc;
+        }
+        nav form {
+            display: inline;
+            margin: 0;
+        }
+        ul {
+            padding-left: 1.25rem;
+        }
+        li {
+            margin-bottom: 0.5rem;
+        }
+        button {
+            font-size: 1rem;
+            padding: 0.3rem 0.6rem;
+        }
+        input, select {
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="{% url 'chores:status_board' %}">Status board</a>
+        |
+        <a href="{% url 'chores:history' %}">History</a>
+        |
+        <a href="{% url 'chores:ownership_map' %}">Ownership map</a>
+        |
+        Notifications ({{ flagged_count }})
+        |
+        {% if user.is_authenticated %}
+        {{ user.get_username }}
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Log out</button>
+        </form>
+        {% else %}
+        <a href="{% url 'login' %}">Log in</a>
+        {% endif %}
+    </nav>
+    <div class="page">
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
