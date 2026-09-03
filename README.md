@@ -59,3 +59,34 @@ uv run python manage.py changepassword <username>
 Plus 6 chores covering every assignment/recurrence combination (fixed, rotating, pool; interval, weekdays, deadline) and 12 chore instances spanning pending, done, overdue, and unclaimed states — so the status board, history log, and ownership map all have something to show immediately.
 
 Log in at `/accounts/login/` to use the app, or `/admin/` (as `alice` or `bob`) to manage chores directly.
+
+## Contributing / agent-driven workflow
+
+New work is filed as a GitHub issue and picked up through a groomed
+PM → Engineer → QA pass (an agent or a person can fill any of those
+roles):
+
+- [`AGENTS.md`](AGENTS.md) — architecture, tech stack, and commands
+  (Claude Code reads this as `CLAUDE.md`, which just imports it)
+- [`_docs/process.md`](_docs/process.md) — how issues move from filed to
+  merged: labels, worktrees, waves, integration
+- [`_docs/decisions.md`](_docs/decisions.md) — the calls already made,
+  with reasons; read before reopening one
+- [`_docs/team/`](_docs/team/) — the PM, engineer, and QA role
+  definitions, and [`_docs/task-template.md`](_docs/task-template.md) for
+  the groomed issue format (Goal / Acceptance criteria / Out of scope /
+  Constraints)
+
+Example, using Claude Code: file a rough issue on GitHub (it doesn't need
+the groomed format — that's the PM's job), then let it self-pace through
+the backlog:
+
+```
+/goal work through the backlog
+```
+
+This finds each open issue, grooms it (PM), implements it (Engineer),
+verifies it against the acceptance criteria and posts a PASS/FAIL
+(QA), then closes it and moves to the next one — stopping once the
+backlog is empty. Point it at one specific issue instead by asking
+directly, e.g. "groom and implement issue #4".
