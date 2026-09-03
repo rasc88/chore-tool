@@ -8,13 +8,16 @@
 {% if ownership %}
 {% for person, instances in ownership %}
 <h2>{{ person }}</h2>
-<ul>
+<ul class="rows">
     {% for instance in instances %}
-    <li>{{ instance.chore.name }} — due {{ instance.due_date }}{% if instance.is_overdue %} — OVERDUE{% endif %}</li>
+    <li>
+        <span class="priority priority-{{ instance.chore.priority }}">{{ instance.chore.get_priority_display }}</span>
+        {{ instance.chore.name }} — due {{ instance.due_date }}{% if instance.is_overdue %} — <span class="overdue-label">OVERDUE</span>{% endif %}
+    </li>
     {% endfor %}
 </ul>
 {% endfor %}
 {% else %}
-<p>Nothing currently assigned.</p>
+<p class="muted">Nothing currently assigned.</p>
 {% endif %}
 {% endblock %}

@@ -7,11 +7,12 @@
 
 <h2>Overdue</h2>
 {% if overdue %}
-<ul>
+<ul class="rows">
     {% for instance in overdue %}
     <li>
-        {{ instance.chore.name }} — due {{ instance.due_date }} — OVERDUE
-        {% if instance.is_unclaimed %}(unclaimed){% else %}— assigned to {{ instance.assigned_to }}{% endif %}
+        <span class="priority priority-{{ instance.chore.priority }}">{{ instance.chore.get_priority_display }}</span>
+        {{ instance.chore.name }} — due {{ instance.due_date }} — <span class="overdue-label">OVERDUE</span>
+        {% if instance.is_unclaimed %}<span class="muted">(unclaimed)</span>{% else %}— assigned to {{ instance.assigned_to }}{% endif %}
         {% if instance.is_unclaimed %}
         <form method="post" action="{% url 'chores:claim_instance' instance.pk %}">
             {% csrf_token %}
@@ -26,16 +27,17 @@
     {% endfor %}
 </ul>
 {% else %}
-<p>Nothing overdue.</p>
+<p class="muted">Nothing overdue.</p>
 {% endif %}
 
 <h2>Pending</h2>
 {% if pending %}
-<ul>
+<ul class="rows">
     {% for instance in pending %}
     <li>
+        <span class="priority priority-{{ instance.chore.priority }}">{{ instance.chore.get_priority_display }}</span>
         {{ instance.chore.name }} — due {{ instance.due_date }}
-        {% if instance.is_unclaimed %}(unclaimed){% else %}— assigned to {{ instance.assigned_to }}{% endif %}
+        {% if instance.is_unclaimed %}<span class="muted">(unclaimed)</span>{% else %}— assigned to {{ instance.assigned_to }}{% endif %}
         {% if instance.is_unclaimed %}
         <form method="post" action="{% url 'chores:claim_instance' instance.pk %}">
             {% csrf_token %}
@@ -50,19 +52,19 @@
     {% endfor %}
 </ul>
 {% else %}
-<p>Nothing pending.</p>
+<p class="muted">Nothing pending.</p>
 {% endif %}
 
 <h2>Done</h2>
 {% if done %}
-<ul>
+<ul class="rows">
     {% for instance in done %}
     <li>
-        {{ instance.chore.name }} — due {{ instance.due_date }} — done by {{ instance.completed_by }} at {{ instance.completed_at }}
+        <span class="muted">{{ instance.chore.name }} — due {{ instance.due_date }} — done by {{ instance.completed_by }} at {{ instance.completed_at }}</span>
     </li>
     {% endfor %}
 </ul>
 {% else %}
-<p>Nothing done yet today.</p>
+<p class="muted">Nothing done yet today.</p>
 {% endif %}
 {% endblock %}
